@@ -7,54 +7,178 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <main class="app">
-    <section class="hero">
-      <p class="badge">AI MV Tools Mini v0.1</p>
-      <h1>Lyrics → AI MV Plan</h1>
-      <p class="subtitle">
-        Dán lời bài hát, chọn mood và style. Tool sẽ tạo shotlist, prompt ảnh,
-        prompt video, caption và thumbnail prompt cho MV AI.
-      </p>
-    </section>
-
-    <section class="panel">
-      <label>Tên bài hát</label>
-      <input id="songTitle" placeholder="Ví dụ: QUA MÙA GIÔNG BÃO" />
-
-      <label>Nghệ sĩ</label>
-      <input id="artistName" placeholder="Ví dụ: ThuanBui Music ft. Quyên Bùi" />
-
-      <label>Mood bài hát</label>
-      <select id="mood">
-        <option value="healing rainy ballad">Healing rainy ballad</option>
-        <option value="nostalgic Vietnamese countryside">Nostalgic Vietnamese countryside</option>
-        <option value="romantic golden hour">Romantic golden hour</option>
-        <option value="sad cinematic piano ballad">Sad cinematic piano ballad</option>
-        <option value="spiritual peaceful Buddhist">Spiritual peaceful Buddhist</option>
-      </select>
-
-      <label>Style hình ảnh</label>
-      <select id="style">
-        <option value="cinematic realistic Asian music video still">Cinematic realistic Asian MV</option>
-        <option value="soft watercolor album cover">Soft watercolor album cover</option>
-        <option value="pastel chibi illustration">Pastel chibi illustration</option>
-        <option value="minimalist emotional YouTube thumbnail">Minimalist emotional thumbnail</option>
-        <option value="dreamy nostalgic film look">Dreamy nostalgic film look</option>
-      </select>
-
-      <label>Lyrics</label>
-      <textarea id="lyrics" placeholder="Dán lời bài hát vào đây..."></textarea>
-
-      <div class="buttons">
-        <button onclick="generateMVPlan()">Generate MV Plan</button>
-        <button class="secondary" onclick="downloadMarkdown()">Download .md</button>
-        <button class="secondary" onclick="copyOutput()">Copy Output</button>
+  <main class="app-shell">
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">AI MV Tools Mini v0.2</p>
+        <h1>Lyrics to AI MV Plan</h1>
+        <p class="subtitle">
+          Tạo shotlist, prompt ảnh, prompt video, caption và thumbnail prompt từ lyrics cho workflow làm MV AI.
+        </p>
       </div>
+      <div class="header-meta" aria-label="App highlights">
+        <span>No login</span>
+        <span>Static web app</span>
+      </div>
+    </header>
+
+    <section class="workspace" aria-label="AI MV planning workspace">
+      <section class="tool-panel" aria-labelledby="inputTitle">
+        <div class="panel-heading">
+          <div>
+            <p class="section-kicker">Input</p>
+            <h2 id="inputTitle">Project setup</h2>
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="songTitle">Tên bài hát</label>
+            <input id="songTitle" placeholder="Ví dụ: QUA MÙA GIÔNG BÃO" />
+          </div>
+
+          <div class="field">
+            <label for="artistName">Nghệ sĩ</label>
+            <input id="artistName" placeholder="Ví dụ: ThuanBui Music ft. Quyên Bùi" />
+          </div>
+        </div>
+
+        <div class="field-grid">
+          <div class="field">
+            <label for="mood">Mood bài hát</label>
+            <select id="mood">
+              <option value="healing rainy ballad" data-en="healing rainy ballad" data-vi="ballad chữa lành trong mưa">Healing rainy ballad</option>
+              <option value="nostalgic Vietnamese countryside" data-en="nostalgic Vietnamese countryside" data-vi="hoài niệm làng quê Việt Nam">Nostalgic Vietnamese countryside</option>
+              <option value="romantic golden hour" data-en="romantic golden hour" data-vi="lãng mạn lúc hoàng hôn">Romantic golden hour</option>
+              <option value="sad cinematic piano ballad" data-en="sad cinematic piano ballad" data-vi="ballad piano buồn giàu chất điện ảnh">Sad cinematic piano ballad</option>
+              <option value="spiritual peaceful Buddhist" data-en="spiritual peaceful Buddhist" data-vi="an yên, thiền vị và tâm linh">Spiritual peaceful Buddhist</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="style">Style hình ảnh</label>
+            <select id="style">
+              <option value="cinematic realistic Asian music video still" data-en="cinematic realistic Asian music video still" data-vi="khung hình MV châu Á chân thực, điện ảnh">Cinematic realistic Asian MV</option>
+              <option value="soft watercolor album cover" data-en="soft watercolor album cover" data-vi="bìa album màu nước mềm mại">Soft watercolor album cover</option>
+              <option value="pastel chibi illustration" data-en="pastel chibi illustration" data-vi="minh họa chibi pastel">Pastel chibi illustration</option>
+              <option value="minimalist emotional YouTube thumbnail" data-en="minimalist emotional YouTube thumbnail" data-vi="thumbnail YouTube tối giản, giàu cảm xúc">Minimalist emotional thumbnail</option>
+              <option value="dreamy nostalgic film look" data-en="dreamy nostalgic film look" data-vi="màu phim mơ màng, hoài niệm">Dreamy nostalgic film look</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-grid compact">
+          <div class="field">
+            <label for="aspectRatio">Aspect ratio</label>
+            <select id="aspectRatio">
+              <option value="16:9">16:9 Landscape</option>
+              <option value="1:1">1:1 Square</option>
+              <option value="9:16">9:16 Vertical</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="outputLanguage">Ngôn ngữ output</label>
+            <select id="outputLanguage">
+              <option value="vi">Vietnamese</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="lyrics">Lyrics</label>
+          <textarea id="lyrics" placeholder="Dán lời bài hát vào đây..." oninput="updateLyricsStats()"></textarea>
+          <div class="lyrics-tools">
+            <p id="lyricsStats" class="lyrics-stats">Detected lines: 0 | Clean lyric lines: 0</p>
+            <button class="secondary compact-button" type="button" onclick="previewCleanLyrics()">Clean Lyrics Preview</button>
+          </div>
+        </div>
+
+        <div class="buttons primary-actions">
+          <button class="primary" type="button" onclick="generateMVPlan()">Generate MV Plan</button>
+          <button class="secondary" type="button" onclick="loadDemoSong()">Load Demo Song</button>
+          <button class="ghost" type="button" onclick="clearForm()">Clear</button>
+        </div>
+      </section>
+
+      <section class="output-panel" aria-labelledby="outputTitle">
+        <div class="panel-heading output-heading">
+          <div>
+            <p class="section-kicker">Output</p>
+            <h2 id="outputTitle">Kết quả</h2>
+          </div>
+          <div class="buttons output-actions">
+            <button class="secondary" type="button" onclick="downloadMarkdown()">Download .md</button>
+            <button class="secondary" type="button" onclick="downloadCSV()">Export CSV</button>
+            <button class="secondary" type="button" onclick="copyOutput()">Copy Output</button>
+          </div>
+        </div>
+
+        <pre id="output">Kết quả sẽ xuất hiện ở đây...</pre>
+      </section>
     </section>
 
-    <section class="output-panel">
-      <h2>Kết quả</h2>
-      <pre id="output">Kết quả sẽ xuất hiện ở đây...</pre>
+    <section class="landing-section" aria-labelledby="landingTitle">
+      <div class="landing-header">
+        <p class="section-kicker">Creator workflow</p>
+        <h2 id="landingTitle">A compact planning desk for AI music videos</h2>
+        <p>
+          AI MV Tools Mini turns raw lyrics into production-ready prompts, scene ideas,
+          captions, and exportable planning files for faster MV creation.
+        </p>
+      </div>
+
+      <div class="landing-grid">
+        <article class="info-card">
+          <span class="card-number">01</span>
+          <h3>What this tool does</h3>
+          <p>
+            Cleans lyrics, splits them into scene blocks, then generates shotlists,
+            image prompts, video prompts, thumbnail prompts, and social captions.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <span class="card-number">02</span>
+          <h3>Who it is for</h3>
+          <p>
+            Built for AI music creators, indie artists, YouTube channel owners,
+            prompt writers, and small teams producing lyric-driven music videos.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <span class="card-number">03</span>
+          <h3>How to use in 3 steps</h3>
+          <ol class="steps-list">
+            <li>Paste lyrics or load the demo song.</li>
+            <li>Choose mood, visual style, aspect ratio, and output language.</li>
+            <li>Generate, copy, download Markdown, or export CSV.</li>
+          </ol>
+        </article>
+
+        <article class="info-card">
+          <span class="card-number">04</span>
+          <h3>Why it helps AI music video creators</h3>
+          <p>
+            It removes repetitive prompt setup, keeps scenes consistent, and gives
+            creators a cleaner handoff from lyrics to image, video, and publishing tasks.
+          </p>
+        </article>
+      </div>
+
+      <section class="coming-soon" aria-labelledby="proPackTitle">
+        <div>
+          <p class="section-kicker">Coming soon</p>
+          <h2 id="proPackTitle">AI MV Factory Pro Pack</h2>
+          <p>
+            A larger workflow pack for character references, scene continuity,
+            batch prompt variants, thumbnail systems, and full MV production templates.
+          </p>
+        </div>
+        <span>In development</span>
+      </section>
     </section>
   </main>
 
