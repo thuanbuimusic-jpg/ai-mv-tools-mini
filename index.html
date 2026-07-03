@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI MV Tools Mini</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <p class="badge">AI MV Tools Mini v0.1</p>
+      <h1>Lyrics → AI MV Plan</h1>
+      <p class="subtitle">
+        Dán lời bài hát, chọn mood và style. Tool sẽ tạo shotlist, prompt ảnh,
+        prompt video, caption và thumbnail prompt cho MV AI.
+      </p>
+    </section>
+
+    <section class="panel">
+      <label>Tên bài hát</label>
+      <input id="songTitle" placeholder="Ví dụ: QUA MÙA GIÔNG BÃO" />
+
+      <label>Nghệ sĩ</label>
+      <input id="artistName" placeholder="Ví dụ: ThuanBui Music ft. Quyên Bùi" />
+
+      <label>Mood bài hát</label>
+      <select id="mood">
+        <option value="healing rainy ballad">Healing rainy ballad</option>
+        <option value="nostalgic Vietnamese countryside">Nostalgic Vietnamese countryside</option>
+        <option value="romantic golden hour">Romantic golden hour</option>
+        <option value="sad cinematic piano ballad">Sad cinematic piano ballad</option>
+        <option value="spiritual peaceful Buddhist">Spiritual peaceful Buddhist</option>
+      </select>
+
+      <label>Style hình ảnh</label>
+      <select id="style">
+        <option value="cinematic realistic Asian music video still">Cinematic realistic Asian MV</option>
+        <option value="soft watercolor album cover">Soft watercolor album cover</option>
+        <option value="pastel chibi illustration">Pastel chibi illustration</option>
+        <option value="minimalist emotional YouTube thumbnail">Minimalist emotional thumbnail</option>
+        <option value="dreamy nostalgic film look">Dreamy nostalgic film look</option>
+      </select>
+
+      <label>Lyrics</label>
+      <textarea id="lyrics" placeholder="Dán lời bài hát vào đây..."></textarea>
+
+      <div class="buttons">
+        <button onclick="generateMVPlan()">Generate MV Plan</button>
+        <button class="secondary" onclick="downloadMarkdown()">Download .md</button>
+        <button class="secondary" onclick="copyOutput()">Copy Output</button>
+      </div>
+    </section>
+
+    <section class="output-panel">
+      <h2>Kết quả</h2>
+      <pre id="output">Kết quả sẽ xuất hiện ở đây...</pre>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
